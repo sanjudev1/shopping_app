@@ -1,90 +1,77 @@
-import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native';
-import React from 'react';
-import { useRouter, useLocalSearchParams } from 'expo-router';
-import * as Icon from 'react-native-feather';
-import { themeColors } from '../theme';
-import { ImageSourcePropType } from 'react-native';
-import DishRow from '../components/dishrow';
-import CartIcon from '../components/carticon';
-import { StatusBar } from 'expo-status-bar';
+import React, { useEffect, useState } from 'react';
+import { View, Text, FlatList, TouchableOpacity, Image } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../slices/cartSlice';
+import { Product } from '../components/types';
+import Modal from 'react-native-modal';
 
-type Dish = {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  image: ImageSourcePropType;
-};
+const Home: React.FC = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const dispatch = useDispatch();
 
-type Restaurant = {
-  id: number;
-  name: string;
-  image: ImageSourcePropType;
-  category: string;
-  reviews: string;
-  stars: number;
-  address: string;
-  dishes: Dish[];
-};
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const response = await fetch('https://fakestoreapi.com/products');
+      const data = await response.json();
+      setProducts(data);
+    };
+    fetchProducts();
+  }, []);
 
-const RestaurantScreen = () => {
-  const { name, stars, reviews, address, category, title, description, data } = useLocalSearchParams();
-  const router = useRouter();
+  const openModal = (product: Product) => {
+    setSelectedProduct(product);
+    setModalVisible(true);
+  };
 
-  // Parse the data safely
-  const item: Restaurant = JSON.parse(decodeURIComponent(data as string));
+  const closeModal = () => {
+    setModalVisible(false);
+    setSelectedProduct(null);
+  };
 
   return (
-    <View>
-      <CartIcon/>
-      <StatusBar style='light'/>
-      <ScrollView>
-        <View className='relative'>
-          <Image source={require('../assets/images/dishes/download (1) (1).jpeg')} className='w-full h-72' />
-          <TouchableOpacity
-            className='absolute top-14 left-4 bg-gray-50 p-2 rounded-full shadow'
-            onPress={() => router.back()}
-          >
-            <Icon.ArrowLeft strokeWidth={3} stroke={themeColors.bgColor(1)} />
+    <View className="flex-1 p-4 bg-gray-100">
+      <Text className="text-2xl font-bold text-center text-blue-700 mb-4 mt-5">Welcome to Our Store</Text>
+      <FlatList
+        data={products}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <TouchableOpacity onPress={() => openModal(item)} className="mb-4 rounded-lg shadow-md bg-white border border-gray-200">
+            <View className="p-4">
+              <Image source={{ uri: item.image }} className="h-40 w-full object-cover rounded-md mb-2" />
+              <Text className="text-lg font-semibold text-gray-800">{item.title}</Text>
+              <Text className="text-gray-600">${item.price.toFixed(2)}</Text>
+            </View>
           </TouchableOpacity>
-        </View>
-        <View style={{ borderTopLeftRadius: 40, borderTopRightRadius: 40 }} className='bg-white -mt-12 pt-6'>
-          <View className='px-5'>
-            <Text className='text-3xl font-bold'>{item.name}</Text>
-            <View className='flex-row my-1 space-x-1 text-xs'>
-              <View className='flex-row items-center space-x-1'>
-                <Image source={require('../assets/images/dishes/download (1) (1).jpeg')} className='h-4 w-4' />
-                <Text className='text-xs'>
-                  <Text className='text-green-700'>{item.stars}</Text>
-                  <Text className='text-gray-700'>
-                    ({reviews} review) <Text className='font-semibold'>{item.category}</Text>
-                  </Text>
-                </Text>
-              </View>
-              <View className='flex-row items-center my-2 space-x-2'>
-                <Icon.MapPin color="gray" width="15" height="15" />
-                <Text className='text-gray-700 text-sm'>Nearby . {typeof address === 'string' ? address.substring(0, 10) : ''}...</Text>
-              </View>
+        )}
+      />
+      {selectedProduct && (
+        <Modal isVisible={modalVisible} onBackdropPress={closeModal}>
+          <View className="bg-white p-6 rounded-lg">
+            <Image source={{ uri: selectedProduct.image }} className="w-full h-64 object-contain" />
+            <Text className="mt-4 text-xl font-bold text-gray-800">{selectedProduct.title}</Text>
+            <Text className="mt-2 text-gray-600">{selectedProduct.description}</Text>
+            <Text className="mt-4 text-xl font-semibold text-gray-800">${selectedProduct.price.toFixed(2)}</Text>
+            <View className="flex-row mt-6 space-x-4">
+              <TouchableOpacity 
+                onPress={() => {
+                  dispatch(addToCart(selectedProduct));
+                  closeModal();
+                }}
+                className="flex-1 bg-blue-500 py-2 rounded-lg"
+              >
+                <Text className="text-center text-white font-semibold">Add to Cart</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={closeModal} className="flex-1 bg-gray-300 py-2 rounded-lg">
+                <Text className="text-center text-black font-semibold">Close</Text>
+              </TouchableOpacity>
             </View>
-            <Text className='text-gray-700'>{description}</Text>
           </View>
-        </View>
-        <View className='pb-36 bg-white'>
-          <Text className='px-4 py-4 text-2xl font-bold'>Menu</Text>
-          {/* dishes */}
-          {item.dishes.length > 0 ? (
-            <View>
-              {item.dishes.map((dish: Dish) => (
-              <DishRow key={dish.id} dishitem={dish} />
-              ))}
-            </View>
-          ) : (
-            <Text className='text-gray-700 px-4 py-2'>No dishes available.</Text>
-          )}
-        </View>
-      </ScrollView>
+        </Modal>
+      )}
     </View>
   );
 };
 
-export default RestaurantScreen;
+export default Home;

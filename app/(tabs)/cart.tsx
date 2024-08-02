@@ -1,21 +1,21 @@
-import { View, Text, TouchableOpacity, Image, ScrollView, SafeAreaView } from 'react-native';
 import React from 'react';
-import { useRouter } from 'expo-router';
-import { themeColors } from '../theme';
-import * as Icon from 'react-native-feather';
+import { View, Text, FlatList, Image, Button, SafeAreaView, TouchableOpacity, ScrollView } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { removeFromCart, selectCartItems, selectCartTotal } from '../slices/cartSlice';
+import { incrementQuantity, decrementQuantity, selectCartItems, selectCartTotal } from '../slices/cartSlice';
+import { Product } from '../components/types';
 import { RootState } from '../store/store';
-
-const Cart = () => {
-  const cartItems = useSelector(selectCartItems);
-  const cartTotal = useSelector(selectCartTotal);
-  const navigation = useRouter();
+import { themeColors } from '../theme';
+import { useRouter } from 'expo-router';
+import * as Icon from 'react-native-feather'
+const Cart: React.FC = () => {
   const dispatch = useDispatch();
-  const deliveryFee = 2;
+  const cartItems = useSelector(selectCartItems);
+  const carttotal = useSelector(selectCartTotal)
+  const deliveryfee=40
 
-  return (
-    <SafeAreaView className='bg-white flex-1'>
+ const navigation =useRouter()
+  return(
+    <View className='bg-white flex-1'>
       {/* back button */}
       <View className='relative py-4 shadow-sm'>
         <TouchableOpacity
@@ -26,18 +26,18 @@ const Cart = () => {
           <Icon.ArrowLeft stroke='white' strokeWidth={3} />
         </TouchableOpacity>
         <View>
-          <Text className='text-center font-bold text-xl'>Your cart</Text>
-          <Text className='text-center text-gray-500'>Selected Restaurant Name</Text>
+          <Text className='text-center font-bold text-xl mt-5'>Your cart</Text>
+          <Text className='text-center text-gray-500'>Selected Shpoing Items</Text>
         </View>
       </View>
 
       {/* delivery time */}
       <View
         style={{ backgroundColor: themeColors.bgColor(0.2) }}
-        className='flex-row px-4 items-center'
+        className='flex-row px-7 items-center'
       >
-        <Image source={require('../assets/deliveryboy/delivery.png')} className='w-20 h-20 rounded-full' />
-        <Text className='flex-1 pl-4'>Deliver in 20-30 minutes</Text>
+        {/* <Image source={{uri:}} className='w-20 h-20 rounded-full' /> */}
+        <Text className='flex-1 pl-4'>Order now delivery with in one day</Text>
         <TouchableOpacity>
           <Text className='font-bold' style={{ color: themeColors.text }}>
             Change
@@ -62,11 +62,19 @@ const Cart = () => {
               <Text className='font-bold' style={{ color: themeColors.text }}>
                 {item.quantity} x
               </Text>
-              <Image className='h-14 rounded-full' source={item.image} />
-              <Text className='flex-1 font-bold text-gray-700'>{item.name}</Text>
-              <Text className='font-semibold text-base'>${item.price}</Text>
+              <Image className='h-14 w-14 rounded-full' source={{uri:item.image}} />
+              <Text className='flex-1 font-bold text-gray-700'>{item.title}</Text>
+              <Text className='font-semibold text-base'>${item.price.toFixed(2)}</Text>
+            
               <TouchableOpacity
-                onPress={() => dispatch(removeFromCart(item.id))}
+                onPress={() => dispatch(incrementQuantity(item.id))}
+                className='p-1 rounded-full'
+                style={{ backgroundColor: themeColors.bgColor(1) }}
+              >
+                <Icon.Plus strokeWidth={2} height={20} width={20} stroke='white' />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => dispatch(decrementQuantity(item.id))}
                 className='p-1 rounded-full'
                 style={{ backgroundColor: themeColors.bgColor(1) }}
               >
@@ -76,48 +84,48 @@ const Cart = () => {
           ))
         ) : (
           <View className='flex-1 justify-center items-center'>
-            <Image className='h-80 w-80' source={require('../assets/deliveryboy/delivery.png')} />
-            <Text className='text-center text-gray-700 py-4'>Your cart is empty.</Text>
+            {/* <Image className='h-80 w-80' source={{uri:}} /> */}
+            <Text className='text-center text-gray-700 py-4 mr-5 text-3xl'>Your cart is empty...</Text>
           </View>
         )}
       </ScrollView>
 
       {/* totals */}
-      {cartItems.length > 0 && (
+      {cartItems.length > 0 ? (
         <View
           style={{ backgroundColor: themeColors.bgColor(0.2) }}
           className='p-6 px-8 rounded-t-3xl space-y-4'
         >
           <View className='flex-row justify-between'>
             <Text className='text-gray-700'>Subtotal</Text>
-            <Text className='text-gray-700'>${cartTotal}</Text>
+            <Text className='text-gray-700'>${carttotal.toFixed(1)}</Text>
           </View>
 
           <View className='flex-row justify-between'>
             <Text className='text-gray-700'>Delivery Fee</Text>
-            <Text className='text-gray-700'>${deliveryFee}.00</Text>
+            <Text className='text-gray-700'>${deliveryfee}</Text>
           </View>
 
           <View className='flex-row justify-between'>
             <Text className='text-gray-700 font-extrabold'>Order Total</Text>
-            <Text className='text-gray-700 font-extrabold'>${cartTotal + deliveryFee}.00</Text>
+            <Text className='text-gray-700 font-extrabold'>${carttotal.toFixed(1) + deliveryfee}</Text>
           </View>
 
           <View>
             <TouchableOpacity
-              onPress={() => navigation.push('/orderpreparing')}
+              onPress={() => navigation.push('/orderplacing')}
               style={{ backgroundColor: themeColors.bgColor(1) }}
               className='p-3 rounded-full'
             >
               <Text className='text-white text-center font-bold text-lg'>
-                Place Order
+                Buy now
               </Text>
             </TouchableOpacity>
           </View>
         </View>
-      )}
-    </SafeAreaView>
-  );
+      ):<Image source={require('../assets/deliveryboy/empty-cart.png')} className='absolute z-30 top-60 ml-7 h-72 w-72'/>}
+    </View>
+  )
 };
 
 export default Cart;

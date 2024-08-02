@@ -30,6 +30,7 @@ const TabsLayout = () => {
           tabBarIcon: ({ color }) => <FontAwesome size={28} name="user" color={color} />,
         }}
       />
+
       <Tabs.Screen
         name="cart"
         options={{
@@ -39,7 +40,7 @@ const TabsLayout = () => {
         }}
       />
        <Tabs.Screen
-        name="orderpreparing"
+        name="orderplacing"
         options={{
           title: 'Order Preparing',
           headerShown: false,
@@ -48,15 +49,7 @@ const TabsLayout = () => {
           
         }}
       />
-      <Tabs.Screen
-        name="delivery"
-        options={{
-          title: 'food delivery',
-          headerShown: false,
-          href:null,
-          
-        }}
-      />
+      
     </Tabs>
     
   );
