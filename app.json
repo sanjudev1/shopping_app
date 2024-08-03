@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "food_delivery_app",
-    "slug": "food_delivery_app",
+    "name": "Fashion_shopping_App",
+    "slug": "Fashion_shopping_App",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "food_delivery_app",
+    "scheme": "Fashion_shopping_App",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/splash.png",
@@ -20,7 +20,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.sanjudev1.food_delivery_app"
+      "package": "com.sanjudev1.Fashion_shopping_App"
     },
     "web": {
       "bundler": "metro",
@@ -38,7 +38,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "ad04332f-cfbb-4301-809f-ea632b92c9f8"
+        "projectId": "52f2bf0e-8f88-429a-8c98-76cfee7353db"
       }
     }
   }

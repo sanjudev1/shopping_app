@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { addToCart } from '../slices/cartSlice';
 import { Product } from '../components/types';
 import Modal from 'react-native-modal';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 const Home: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -30,18 +31,40 @@ const Home: React.FC = () => {
     setSelectedProduct(null);
   };
 
+  const renderStars = (rate: number) => {
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      if (i <= rate) {
+        stars.push(<FontAwesome key={i} name="star" size={16} color="#FFD700" />); 
+      } else if (i === Math.ceil(rate) && rate % 1 !== 0) {
+        stars.push(<FontAwesome key={i} name="star-half-empty" size={16} color="#FFD700" />); 
+      } else {
+        stars.push(<FontAwesome key={i} name="star-o" size={16} color="#D3D3D3" />); 
+      }
+    }
+    return stars;
+  };
+
   return (
     <View className="flex-1 p-4 bg-gray-100">
-      <Text className="text-2xl font-bold text-center text-blue-700 mb-4 mt-5">Welcome to Our Store</Text>
+      <Text className="text-2xl font-bold text-center text-blue-700 mb-4 mt-5 bg-blue-200">Welcome to Our Store</Text>
       <FlatList
         data={products}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <TouchableOpacity onPress={() => openModal(item)} className="mb-4 rounded-lg shadow-md bg-white border border-gray-200">
-            <View className="p-4">
-              <Image source={{ uri: item.image }} className="h-40 w-full object-cover rounded-md mb-2" />
-              <Text className="text-lg font-semibold text-gray-800">{item.title}</Text>
-              <Text className="text-gray-600">${item.price.toFixed(2)}</Text>
+            <View className="flex-row p-4">
+              <Image source={{ uri: item.image }} className="h-40 w-40 object-cover rounded-md mr-4" />
+              <View className="flex-1">
+                <Text className="text-lg font-semibold text-gray-800">{item.title}</Text>
+                <Text className="text-gray-600 mt-2">${item.price.toFixed(2)}</Text>
+                
+                <View className="flex-row items-center">
+                  {renderStars(item.rating.rate)}
+                  <Text className="text-gray-600 ml-2 mt-2">({item.rating.count})</Text>
+                </View>
+                <Text className="text-gray-600 mt-2"><Text className='font-semibold'>Category:</Text> {item.category}</Text>
+              </View>
             </View>
           </TouchableOpacity>
         )}

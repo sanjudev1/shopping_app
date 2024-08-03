@@ -5,7 +5,7 @@ import { incrementQuantity, decrementQuantity, selectCartItems, selectCartTotal 
 import { Product } from '../components/types';
 import { RootState } from '../store/store';
 import { themeColors } from '../theme';
-import { useRouter } from 'expo-router';
+import { router, useRouter } from 'expo-router';
 import * as Icon from 'react-native-feather'
 const Cart: React.FC = () => {
   const dispatch = useDispatch();
@@ -13,13 +13,12 @@ const Cart: React.FC = () => {
   const carttotal = useSelector(selectCartTotal)
   const deliveryfee=40
 
- const navigation =useRouter()
   return(
     <View className='bg-white flex-1'>
       {/* back button */}
       <View className='relative py-4 shadow-sm'>
         <TouchableOpacity
-          onPress={() => navigation.back()}
+          onPress={() => router.back()}
           style={{ backgroundColor: themeColors.bgColor(1) }}
           className='absolute z-10 rounded-full p-1 shadow top-5 left-2'
         >
@@ -113,7 +112,7 @@ const Cart: React.FC = () => {
 
           <View>
             <TouchableOpacity
-              onPress={() => navigation.push('/orderplacing')}
+              onPress={() => router.replace('/orderplacing')}
               style={{ backgroundColor: themeColors.bgColor(1) }}
               className='p-3 rounded-full'
             >

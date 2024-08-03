@@ -27,7 +27,7 @@ const TabsLayout = () => {
         options={{
           title: 'Profile',
           headerShown: false,
-          tabBarIcon: ({ color }) => <FontAwesome size={28} name="user" color={color} />,
+          tabBarIcon: ({ color }) => <FontAwesome size={28} name="star" color={color} />,
         }}
       />
 

@@ -6,5 +6,9 @@ export interface Product {
     category: string;
     image: string;
     quantity: number;
+    rating :Rating
   }
-  
+  type Rating = {
+    rate:number;
+    count:number
+  }
