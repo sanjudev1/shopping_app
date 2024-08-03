@@ -1,5 +1,5 @@
-# Welcome to your food delivery  app 👋
+# Welcome to your fashion shopping  app 👋
 #tailwind css (native wind)
 #react natigation (expo router)
-#sanity (store and manage data)
-#
+#typescript 
+#redux toolkit for state managing
