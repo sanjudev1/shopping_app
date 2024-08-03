@@ -1,24 +1,19 @@
-import React from 'react';
 import { View, Text, FlatList, Image, Button, SafeAreaView, TouchableOpacity, ScrollView } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { incrementQuantity, decrementQuantity, selectCartItems, selectCartTotal } from '../slices/cartSlice';
-import { Product } from '../components/types';
-import { RootState } from '../store/store';
 import { themeColors } from '../theme';
-import { router, useRouter } from 'expo-router';
+import { router } from 'expo-router';
 import * as Icon from 'react-native-feather'
-const Cart: React.FC = () => {
+const Cart = () => {
   const dispatch = useDispatch();
   const cartItems = useSelector(selectCartItems);
   const carttotal = useSelector(selectCartTotal)
   const deliveryfee=40
-
   return(
     <View className='bg-white flex-1'>
-      {/* back button */}
       <View className='relative py-4 shadow-sm'>
         <TouchableOpacity
-          onPress={() => router.back()}
+          onPress={() => router.replace('/home')}
           style={{ backgroundColor: themeColors.bgColor(1) }}
           className='absolute z-10 rounded-full p-1 shadow top-5 left-2'
         >
@@ -29,13 +24,10 @@ const Cart: React.FC = () => {
           <Text className='text-center text-gray-500'>Selected Shpoing Items</Text>
         </View>
       </View>
-
-      {/* delivery time */}
       <View
         style={{ backgroundColor: themeColors.bgColor(0.2) }}
         className='flex-row px-7 items-center'
       >
-        {/* <Image source={{uri:}} className='w-20 h-20 rounded-full' /> */}
         <Text className='flex-1 pl-4'>Order now delivery with in one day</Text>
         <TouchableOpacity>
           <Text className='font-bold' style={{ color: themeColors.text }}>
@@ -43,8 +35,6 @@ const Cart: React.FC = () => {
           </Text>
         </TouchableOpacity>
       </View>
-
-      {/* dishes */}
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
@@ -83,13 +73,10 @@ const Cart: React.FC = () => {
           ))
         ) : (
           <View className='flex-1 justify-center items-center'>
-            {/* <Image className='h-80 w-80' source={{uri:}} /> */}
             <Text className='text-center text-gray-700 py-4 mr-5 text-3xl'>Your cart is empty...</Text>
           </View>
         )}
       </ScrollView>
-
-      {/* totals */}
       {cartItems.length > 0 ? (
         <View
           style={{ backgroundColor: themeColors.bgColor(0.2) }}

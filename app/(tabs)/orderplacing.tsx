@@ -3,7 +3,6 @@ import React, { useEffect ,useCallback } from 'react';
 import { View, Image, TouchableOpacity, Text } from 'react-native';
 import { themeColors } from '../theme';
 
-// Delay function to simulate navigation after a delay
 
 const OrderPlaced = () => {
   

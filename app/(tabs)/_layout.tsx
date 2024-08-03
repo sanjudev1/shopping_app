@@ -30,8 +30,7 @@ const TabsLayout = () => {
           tabBarIcon: ({ color }) => <FontAwesome size={28} name="star" color={color} />,
         }}
       />
-
-      <Tabs.Screen
+     <Tabs.Screen
         name="cart"
         options={{
           title: 'Cart',
