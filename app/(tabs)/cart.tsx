@@ -1,23 +1,23 @@
-import { View, Text, FlatList, Image, Button, SafeAreaView, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { incrementQuantity, decrementQuantity, selectCartItems, selectCartTotal } from '../slices/cartSlice';
 import { themeColors } from '../theme';
 import { router } from 'expo-router';
-import * as Icon from 'react-native-feather'
-const Cart = () => {
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+const Cart:React.FC = () => {
   const dispatch = useDispatch();
   const cartItems = useSelector(selectCartItems);
-  const carttotal = useSelector(selectCartTotal)
-  const deliveryfee=40
+  const carttotal = useSelector(selectCartTotal);
+  const deliveryfee=40;
   return(
     <View className='bg-white flex-1'>
       <View className='relative py-4 shadow-sm'>
         <TouchableOpacity
           onPress={() => router.replace('/home')}
           style={{ backgroundColor: themeColors.bgColor(1) }}
-          className='absolute z-10 rounded-full p-1 shadow top-5 left-2'
+          className='absolute z-10 rounded-full p-1 top-5 left-2'
         >
-          <Icon.ArrowLeft stroke='white' strokeWidth={3} />
+          <FontAwesome name="arrow-left" size={20} color="white" />
         </TouchableOpacity>
         <View>
           <Text className='text-center font-bold text-xl mt-5'>Your cart</Text>
@@ -29,11 +29,9 @@ const Cart = () => {
         className='flex-row px-7 items-center'
       >
         <Text className='flex-1 pl-4'>Order now delivery with in one day</Text>
-        <TouchableOpacity>
-          <Text className='font-bold' style={{ color: themeColors.text }}>
+          <Text className='font-bold' style={{ color: themeColors.bgColor(1) }}>
             Change
           </Text>
-        </TouchableOpacity>
       </View>
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -60,14 +58,14 @@ const Cart = () => {
                 className='p-1 rounded-full'
                 style={{ backgroundColor: themeColors.bgColor(1) }}
               >
-                <Icon.Plus strokeWidth={2} height={20} width={20} stroke='white' />
+                <FontAwesome name="plus" size={20} color="white" />
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => dispatch(decrementQuantity(item.id))}
                 className='p-1 rounded-full'
                 style={{ backgroundColor: themeColors.bgColor(1) }}
               >
-                <Icon.Minus strokeWidth={2} height={20} width={20} stroke='white' />
+                <FontAwesome name="minus" size={20} color="white" />
               </TouchableOpacity>
             </View>
           ))
