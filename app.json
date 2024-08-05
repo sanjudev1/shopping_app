@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Fashion_shopping_App",
-    "slug": "Fashion_shopping_App",
+    "name": "Fashion_shopping",
+    "slug": "Fashion_shopping",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -20,7 +20,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.sanjudev1.Fashion_shopping_App"
+      "package": "com.sanjudev1.Fashion_shopping"
     },
     "web": {
       "bundler": "metro",
@@ -38,7 +38,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "712c635d-f1fe-44e8-832c-645df4baa284"
+        "projectId": "fd800b9b-8a3c-4d3e-bd21-693fd81d1aee"
       }
     }
   }
